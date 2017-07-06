@@ -47,9 +47,9 @@ do
       echo "SAMPLING ................."
       for o in {0..9}
       do
-         shuf -n $SAMPLE_SIZE ./$DATA_DIR/en.$i$l.deduped > ./$DATA_DIR/en.$i$l.deduped.samp
-         rm ./$DATA_DIR/en.$i$l.deduped
-         mv ./$DATA_DIR/en.$i$l.deduped.samp ./$DATA_DIR/en.$i$l.deduped
+         shuf -n $SAMPLE_SIZE ./$DATA_DIR/en.$i$o.deduped > ./$DATA_DIR/en.$i$o.deduped.samp
+         rm ./$DATA_DIR/en.$i$o.deduped
+         mv ./$DATA_DIR/en.$i$o.deduped.samp ./$DATA_DIR/en.$i$o.deduped
       done
    fi
 
@@ -71,7 +71,6 @@ do
    for n in {0..9}
    do
       cat ./$DATA_DIR/en.$i$n.deduped.tok | parallel --no-notice --pipe -k -j 4 --block 1M perl $SCRIPTS/case_graph.perl --threads $NUM_OF_CORES --lm $TRUECASE_LM --decode $LAZYDIR/bin/decode > ./$DATA_DIR/en.$i$n.deduped.lc
-      #eval $TRUECASE
       rm ./$DATA_DIR/en.$i$n.deduped
       rm ./$DATA_DIR/en.$i$n.deduped.tok
       echo "SCORING ................."
