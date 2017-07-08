@@ -1,6 +1,6 @@
 #!/bin/bash
 NUM_OF_CORES=32
-DATA_DIR=cc_data #Name of the folder to process data
+DATA_DIR=cc_datae #Name of the folder to process data
 LAZYDIR=~/lazy
 SCRIPTS=~/baselines-emnlp2016/train/scripts
 TRUECASE_LM=/home/angelconstantinides/commoncrawllm/cc.kenlm
@@ -9,13 +9,13 @@ NUM_OF_LINES=3809960
 NUCLE_LINES=57151
 CC_PART_LINES=380996016
 SAMPLE=true # Sample instead of using the original file 
-SAMPLE_SIZE=3810000 #3810000 - 1% or 19050000 - 5% of the original size
+SAMPLE_SIZE=19050000 #3810000 - 1% or 19050000 - 5% of the original size
 
 if [ ! -d $DATA_DIR ]; then
    echo "Creating Directory $data_dir"
    mkdir $DATA_DIR
 fi
-for i in {1..1}
+for i in {5..5}
 do
    for j in {0..9}
    do
@@ -74,6 +74,6 @@ do
       rm ./$DATA_DIR/en.$i$n.deduped
       rm ./$DATA_DIR/en.$i$n.deduped.tok
       echo "SCORING ................."
-      $MML_MONO_SCRIPT/mml-score_mono.perl -corpus ./$data_dir/en.$i$n.deduped.lc -query ~/mosesdecoder/bin/query | sort --parallel $NUM_OF_CORES -t $'\t' -k 2,2 -nr | head -$NUM_OF_LINES > ./sorted_score$i$n.out &
+      $MML_MONO_SCRIPT/mml-score_mono.perl -corpus ./$DATA_DIR/en.$i$n.deduped.lc -query ~/mosesdecoder/bin/query | sort --parallel $NUM_OF_CORES -t $'\t' -k 2,2 -nr | head -$NUM_OF_LINES > ./sorted_score$i$n.out &
    done
 done
