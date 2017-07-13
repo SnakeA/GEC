@@ -98,5 +98,5 @@ echo "Training a KenLM Language Model ................."
 $MOSES_BIN/lmplz -o 5 -S 80% -T /tmp --prune 0 0 1 < cc_pseudo.corpus > cc_pseudo.arpa
 
 # Binarize it
-echo "Training a KenLM Language Model ................."
+echo "Binarizing Language Model ................."
 $MOSES_BIN/build_binary cc_pseudo.arpa cc_pseudo.blm
