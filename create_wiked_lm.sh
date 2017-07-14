@@ -1,6 +1,6 @@
 #!/bin/bash
 
-NUM_OF_CORES=10
+NUM_OF_CORES=16
 WIKED_DIR=wiked
 MOSES_BIN=/home/angelconstantinides/mosesdecoder/bin
 MML_BI_SCRIPT=/home/angelconstantinides/scripts
@@ -21,11 +21,20 @@ NUM_OF_LINES20=4878553
 # - out-source.blm (i.e. WikEd)
 # - out-target.blm
 
-$MML_BI_SCRIPT/mml-score_mono.perl -corpus ./$WIKED_DIR/wiked.tc.clean -query ~/mosesdecoder/bin/query -input-extension err -output-extension cor | sort --parallel $NUM_OF_CORES -t $'\t' -k 2,2 -nr > score_sorted.out
+echo "Scoring WikEd Corpus ................."
+$MML_BI_SCRIPT/mml-score_bi.perl -corpus ./$WIKED_DIR/wiked.tc.clean -query ~/mosesdecoder/bin/query -input-extension err -output-extension cor | sort --parallel $NUM_OF_CORES -t $'\t' -k 2,2 -nr > score_wiked.out
 
-cat score_sorted.out | head -$NUM_OF_LINES5 > ./wiked_score5.out
-cat score_sorted.out | head -$NUM_OF_LINES10 > ./wiked_score10.out
-cat score_sorted.out | head -$NUM_OF_LINES20 > ./wiked_score20.out
+echo "Sorting Scores ................."
+cat score_wiked.out | head -$NUM_OF_LINES5 > ./wiked_score5.out
+cat score_wiked.out | head -$NUM_OF_LINES10 > ./wiked_score10.out
+cat score_wiked.out | head -$NUM_OF_LINES20 > ./wiked_score20.out
+
+
+#Check if wiked.corpus exists, otherwise merge .err and .cor to create it
+if [ ! -f ./$WIKED_DIR/wiked.corpus ]; then
+   echo "Creating Directory Wiked.Corpus file"
+   python split_merge.py ./$WIKED_DIR/wiked.tc.clean.err ./$WIKED_DIR/wiked.corpus --corpus_target ./$WIKED_DIR/wiked.tc.clean.cor
+fi
 
 # Extract Top Scoring Sentences
 echo "Extracting Sentences from the corpus ................."
@@ -43,3 +52,5 @@ $MOSES_BIN/lmplz -o 5 -S 80% -T /tmp < wiked_pseudo20.target > wiked_pseudo20.ar
 # Binarize it
 echo "Binarizing Language Model ................."
 $MOSES_BIN/build_binary wiked_pseudo20.arpa wiked_pseudo20.blm
+
+
