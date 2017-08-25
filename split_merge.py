@@ -18,7 +18,7 @@ def main():
 	parser = argparse.ArgumentParser()
 	parser.add_argument("corpus", help="The name of the file that contains the coprpus --monolingual-- or source side --bilingual--")
 	parser.add_argument("output", help="The name of the file that the extracted sentences will be written to")
-	parser.add_argument("--corpus_target", help="Consider only the top-n sentences (optional)")
+	parser.add_argument("--corpus_target", help="The target side of the corpus, if merging (optional)")
 	args = parser.parse_args()
 
 	print ("corpus " + args.corpus)
